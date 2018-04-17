@@ -77,13 +77,19 @@ defmodule Cards do
   end
 
   def load(filename) when is_bitstring(filename) do
-    {:ok, data}= File.read(filename)
-    binary = :erlang.binary_to_term(data)
-    binary
+    case File.read(filename) do
+      {:ok,data} -> :erlang.binary_to_term(data)
+      {:error,_data} -> IO.puts("no encontre el archivo")
+    end
   end
 
   def load(_filename) do
     IO.puts("el nombre del archivo no es string")
   end
 
+  def new_game(t_mano) do
+    create_dec()
+    |> shuffle()
+    |> repartir(t_mano)
+  end
 end
